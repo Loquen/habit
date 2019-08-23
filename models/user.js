@@ -3,12 +3,12 @@ var mongoose = require('mongoose');
 var monthSchema = new mongoose.Schema({
   month: {
     type: Date,
-    required
+    required: true
   },
   days: [{
     type: Boolean,
     default: false,
-    required
+    required: true
   }]
 }, {
   timestamps: true
@@ -17,7 +17,7 @@ var monthSchema = new mongoose.Schema({
 var habitSchema = new mongoose.Schema({
   name: {
     type: String,
-    required
+    required: true
   },
   category: String,
   months: [monthSchema]
