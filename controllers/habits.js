@@ -1,10 +1,11 @@
 const User = require('../models/user');
 
 module.exports = {
-  index
+  index,
+  new: newHabit
 };
 
-function index(req, res, next) {
+function index(req, res, next){
   console.log(req.query)
   // Make the query object to use with Student.find based up
   // the user has submitted the search form or now
@@ -18,7 +19,15 @@ function index(req, res, next) {
     res.render('habits/index', {
       user: req.user,
       name: req.query.name,
-      sortKey
+      sortKey,
+      title: 'All Habits'
     });
+  });
+}
+
+function newHabit(req, res, next){
+  res.render('habits/new', {
+    user: req.user,
+    title: 'Add A New Habit'
   });
 }
