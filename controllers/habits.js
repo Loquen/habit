@@ -37,9 +37,6 @@ function newHabit(req, res, next){
 
 // Create a new habit
 function create(req, res, next){
-  // What info do we have?
-  // Grab current month
-  // create array of month.daysInMonth() with default False values
   let newHabit = req.body;
   let newMonth = {};
   let month = new Date;
@@ -49,6 +46,14 @@ function create(req, res, next){
   let days = new Array(numberOfDays).fill(false);
   newMonth.days = days;
   newHabit.months = new Array(newMonth);
-  console.log(newHabit);
-  res.redirect('/habits');
+
+
+  console.log(newMonth, '//////////////');
+  User.findById(req.user.id, function(err, user){
+    user.habits.push(newHabit);
+    user.save(function(err){
+      res.redirect('/habits');
+    })
+  });
+  // res.redirect('/habits');
 }
