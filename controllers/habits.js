@@ -8,23 +8,23 @@ module.exports = {
 };
 
 function index(req, res, next){
-  console.log(req.query)
-  // Make the query object to use with Student.find based up
-  // the user has submitted the search form or now
-  let modelQuery = req.query.name ? {name: new RegExp(req.query.name, 'i')} : {};
-  // Default to sorting by name
-  let sortKey = req.query.sort || 'name';
-  User.find(modelQuery)
-  .sort(sortKey).exec(function(err, user) {
-    if (err) return next(err);
-    // Passing search values, name & sortKey, for use in the EJS
-    res.render('habits/index', {
-      user: req.user,
-      name: req.query.name,
-      sortKey,
-      title: 'All Habits'
+  if(req.user){
+    User.findById(req.user.id, function(err, user){
+      res.render('habits/index', {
+        user: req.user,
+        habits: user.habits,
+        month: getCurrentMonth(),
+        title: 'All Habits'
+      });
     });
-  });
+  } else {
+    res.render('habits/index', {
+      user: null,
+      habits: null,
+      month: null,
+      title: 'All Habits'
+    })
+  }
 }
 
 // Render new habit page
@@ -39,16 +39,15 @@ function newHabit(req, res, next){
 function create(req, res, next){
   let newHabit = req.body;
   let newMonth = {};
-  let month = new Date;
-  month = month.getMonth() + 1;
-  newMonth.month = month; 
-  let numberOfDays = moment(month).daysInMonth();
+  // let month = new Date;
+  // month = month.getMonth() + 1;
+  newMonth.month = getCurrentMonth();
+  let numberOfDays = getNumberOfDays(newMonth.month);
   let days = new Array(numberOfDays).fill(false);
   newMonth.days = days;
   newHabit.months = new Array(newMonth);
 
-
-  console.log(newMonth, '//////////////');
+  // console.log(newMonth, '//////////////');
   User.findById(req.user.id, function(err, user){
     user.habits.push(newHabit);
     user.save(function(err){
@@ -56,4 +55,15 @@ function create(req, res, next){
     })
   });
   // res.redirect('/habits');
+}
+
+/********** HELPER FUNCTIONS *********/
+
+function getCurrentMonth(){
+  let month = new Date;
+  return month.getMonth() + 1;
+}
+
+function getNumberOfDays(month){
+  return moment(month).daysInMonth();
 }

@@ -1,3 +1,32 @@
-  <%- include('../partials/header') %>
+<%- include('../partials/header') %>
+  <% if(user){ %>
 
-  <%- include('../partials/footer') %>
+    <div>User: <%= user.name %></div>
+    <div>Month: <%= month %></div>
+    <div>Habits</div>
+    <div>
+      <% habits.forEach(habit => { %>
+        <div>
+        <% habit.months.forEach( m => { %>
+          <% if(month = m){ %>
+            <%= habit.name %>
+            <!-- We want to render the current month's days only -->
+            <% m.days.forEach(day => { %>
+              <span> 
+                <% if(day){ %>
+                  X
+                <% } else { %>
+                  [ ]
+                <% } %>
+                </span>
+            <% }); %> 
+          <% } %>
+        <% }); %> 
+      </div>
+      <% }); %> 
+    </div>
+  <% } else { %>
+    <h3><a href="/auth/google">Login with Google</a></h3>
+  <% } %>
+
+<%- include('../partials/footer') %>
