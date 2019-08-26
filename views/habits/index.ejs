@@ -7,6 +7,10 @@
     <div>
       <% habits.forEach(habit => { %>
         <div>
+        <form action="/habits/<%= habit.id %>?_method=DELETE" method="POST">
+          <input type="submit" id="delete-btn" value="Delete">
+        </form>
+        <a href="/habits/<%= habit.id %>">Update</a>
         <% habit.months.forEach( m => { %>
           <% if(month = m){ %>
             <%= habit.name %>

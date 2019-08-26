@@ -1,0 +1,17 @@
+<%- include('../partials/header') %>
+
+<form action="/habits/<%= habit.id %>?_method=PUT" method="POST">
+  <div>
+    <label>Name:
+      <input type="text" name="name" value="<%= name %>">
+    </label>
+  </div>
+  <div>
+    <label>Category:
+      <input type="text" name="category" value="<%= category %>">
+    </label>
+  </div>
+  <input type="submit" value="Update Habit">
+</form>
+
+<%- include('../partials/footer') %>
