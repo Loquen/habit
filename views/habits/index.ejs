@@ -1,10 +1,8 @@
 <%- include('../partials/header') %>
+
   <% if(user){ %>
-    <% let weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']; %>
-    <div>User: <%= user.name %></div>
-    <div>Month: <%= month %></div>
     <div class="row">
-      <div class="col s12 m7">
+      <div class="col s12 m8">
         <div class="card horizontal">
           <div class="card-stacked">
             <div class="card-content">        
@@ -12,10 +10,10 @@
                 <table>
                   <thead>
                     <th></th>
-                    <th><%= weekDays[(7 - (today.dayOfWeek + 3))]%></th>
-                    <th><%= weekDays[(7 - (today.dayOfWeek + 2))]%></th>
-                    <th><%= weekDays[(today.dayOfWeek - 1)]%></th>
-                    <th>Today</th>
+                    <th><%= today.month %> <%= today.date - 3 %></th>
+                    <th><%= today.month %> <%= today.date - 2 %></th>
+                    <th><%= today.month %> <%= today.date - 1 %></th>
+                    <th class="red-text">Today</th>
                   </thead>
                 <% habits.forEach(habit => { %>        
                   <% habit.months.forEach( m => { %>
@@ -48,7 +46,7 @@
               </div>
             </div>
             <div class="card-action">
-              <a href="/habits/new">Add Habit</a>
+              <a href="/habits/new" class="waves-effect waves-light btn">Add Habit</a>
             </div>
           </div>
         </div>
@@ -81,7 +79,17 @@
       </div>  
     </div>
   <% } else { %>
-    <h3><a href="/auth/google">Login with Google</a></h3>
+    <div class="row">
+      <div class="col s12 m8 offset-m2">
+        <div class="card horizontal">
+          <div class="card-stacked">
+            <div class="card-content">
+              <h4 class="title"><a href="/auth/google">Login with Google to see all of your habits</a></h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   <% } %>
 
 <%- include('../partials/footer') %>

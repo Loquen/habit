@@ -8,15 +8,20 @@ main {
   flex: 1 0 auto;
   background: url(/public/images/background.png);
 }
+
 a {
   color: #00B7FF;
 }
 
-.page-footer{
+h1.title {
+  text-align: center;
+}
+
+.page-footer {
   padding: 20px;
 }
 
-nav .brand-logo{
+nav .brand-logo {
   margin-left: 10px;
 }
 
@@ -34,11 +39,11 @@ nav .brand-logo{
   background-color: white;
 }
 
-input[type="checkbox"], input[type="checkbox"]:not(:checked), input[type="checkbox"]:checked{
+input[type="checkbox"], input[type="checkbox"]:not(:checked), input[type="checkbox"]:checked {
   opacity: 1;
   position: relative;
 }
 
-.habit-check{
+.habit-check {
   font-size: 20px;
 }

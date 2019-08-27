@@ -19,7 +19,7 @@ function index(req, res, next){
         habits: user.habits,
         month: getCurrentMonth(),
         today: getCurrentDay(),
-        title: 'All Habits'
+        title: `${req.user.name.substring(0, req.user.name.indexOf(" "))}'s Habits`
       });
     });
   } else {
@@ -140,6 +140,7 @@ function getCurrentDay(){
     date: parseInt(date.format('D')),
     day: date.format('ddd'),
     dayOfWeek: date.format('d'),
+    do: date.format('Do'),
     month: date.format('MMM')
   };
   return today;
