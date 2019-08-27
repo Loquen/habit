@@ -115,12 +115,24 @@ function update(req, res){
 }
 
 function complete(req, res){
-  console.log(req.body);
+  let today = getCurrentDay();
+  let completedHabits = Object.keys(req.body);
+
   User.findById(req.user.id, function(err, user){
-    console.log(req.body);
-    
+    console.log(user.habits);
+    for(h in user.habits){
+      if(completedHabits.includes(h.name)){
+        h.months.forEach(m => {
+          if(today.month === m.month){
+            m.days[today.date - 1] = true;
+            // user.save(function(err){
+              res.redirect('/habits');
+            // });
+          }
+        });
+      }
+    };
   });
-  res.redirect('/habits');
 }
 
 /********** HELPER FUNCTIONS *********/

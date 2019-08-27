@@ -6,14 +6,15 @@ body {
 
 main {
   flex: 1 0 auto;
-  background: url(/public/images/background.png);
+  background: url(https://i.imgur.com/zISNPNG.png);
 }
 
 a {
   color: #00B7FF;
 }
 
-h1.title {
+.title {
+  color: white;
   text-align: center;
 }
 
@@ -39,11 +40,7 @@ nav .brand-logo {
   background-color: white;
 }
 
-input[type="checkbox"], input[type="checkbox"]:not(:checked), input[type="checkbox"]:checked {
-  opacity: 1;
-  position: relative;
-}
-
-.habit-check {
-  font-size: 20px;
+#delete-btn {
+  margin: 10px;
+  display: inline-block;
 }
