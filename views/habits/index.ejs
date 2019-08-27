@@ -1,33 +1,84 @@
 <%- include('../partials/header') %>
   <% if(user){ %>
-
+    <% let weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']; %>
     <div>User: <%= user.name %></div>
     <div>Month: <%= month %></div>
-    <div>Habits</div>
-    <div>
-      <% habits.forEach(habit => { %>
-        <div>
-        <form action="/habits/<%= habit.id %>?_method=DELETE" method="POST">
-          <input type="submit" id="delete-btn" value="Delete">
-        </form>
-        <a href="/habits/<%= habit.id %>">Update</a>
-        <% habit.months.forEach( m => { %>
-          <% if(month = m){ %>
-            <%= habit.name %>
-            <!-- We want to render the current month's days only -->
-            <% m.days.forEach(day => { %>
-              <span> 
-                <% if(day){ %>
-                  X
-                <% } else { %>
-                  [ ]
-                <% } %>
-                </span>
-            <% }); %> 
-          <% } %>
-        <% }); %> 
+    <div class="row">
+      <div class="col s12 m7">
+        <div class="card horizontal">
+          <div class="card-stacked">
+            <div class="card-content">        
+              <div>
+                <table>
+                  <thead>
+                    <th></th>
+                    <th><%= weekDays[(7 - (today.dayOfWeek + 3))]%></th>
+                    <th><%= weekDays[(7 - (today.dayOfWeek + 2))]%></th>
+                    <th><%= weekDays[(today.dayOfWeek - 1)]%></th>
+                    <th>Today</th>
+                  </thead>
+                <% habits.forEach(habit => { %>        
+                  <% habit.months.forEach( m => { %>
+                    <% if(month === m.month){ %>
+                      <tr>
+                        <td>
+                          <%= habit.name %>
+                        </td>
+                        <% m.days.forEach((day, i) => { %>
+                          <% if(i === today.date - 3 || i === today.date - 2|| i === today.date - 1|| i === today.date ){ %>
+                            <td>
+                            <% if(day){ %>
+                              <div class="complete"></div>
+                            <% } else { %>
+                              <div class="incompete"></div>
+                            <% } %>
+                            </td>
+                          <% } %>
+                      <% }); %> 
+                    <% } %>
+                  <% }); %> 
+                  <td>
+                </td>
+                <td>
+                  <a href="/habits/<%= habit.id %>"><i class="material-icons">create</i></a>
+                </td>
+                </tr>
+                <% }); %> 
+              </table>
+              </div>
+            </div>
+            <div class="card-action">
+              <a href="/habits/new">Add Habit</a>
+            </div>
+          </div>
+        </div>
       </div>
-      <% }); %> 
+      <div class="col s12 m4">
+        <div class="card horizontal">
+          <div class="card-stacked">
+            <form action="/habits/complete?_method=PUT" method="POST">
+              <div class="card-content">
+                <h4>Habits For Today:</h4> 
+                <% habits.forEach(habit => { %>
+                  <% habit.months.forEach(m => { %>
+                    <% if(month === m.month) { %>
+                      <div>
+                        <label for="<%= habit.name %>" >
+                          <span class="habit-check"><%= habit.name %></span>
+                          <input type="checkbox" class="container" id="<%= habit.name %>"/>
+                        </label>
+                      </div>
+                    <% } %>
+                  <% }); %>
+                <% }); %>
+              </div>
+              <div class="card-action">
+                <input type="submit" class="waves-effect waves-light btn" value="Submit Habits">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>  
     </div>
   <% } else { %>
     <h3><a href="/auth/google">Login with Google</a></h3>

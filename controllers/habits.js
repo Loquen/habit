@@ -7,7 +7,8 @@ module.exports = {
   create,
   delete: deleteHabit,
   edit,
-  update
+  update,
+  complete
 };
 
 function index(req, res, next){
@@ -17,6 +18,7 @@ function index(req, res, next){
         user: req.user,
         habits: user.habits,
         month: getCurrentMonth(),
+        today: getCurrentDay(),
         title: 'All Habits'
       });
     });
@@ -25,6 +27,7 @@ function index(req, res, next){
       user: null,
       habits: null,
       month: null,
+      today: null,
       title: 'All Habits'
     })
   }
@@ -111,6 +114,15 @@ function update(req, res){
   });
 }
 
+function complete(req, res){
+  console.log(req.body);
+  User.findById(req.user.id, function(err, user){
+    console.log(req.body);
+    
+  });
+  res.redirect('/habits');
+}
+
 /********** HELPER FUNCTIONS *********/
 
 function getCurrentMonth(){
@@ -120,4 +132,15 @@ function getCurrentMonth(){
 
 function getNumberOfDays(month){
   return moment(month).daysInMonth();
+}
+
+function getCurrentDay(){
+  let date = moment();
+  let today = {
+    date: parseInt(date.format('D')),
+    day: date.format('ddd'),
+    dayOfWeek: date.format('d'),
+    month: date.format('MMM')
+  };
+  return today;
 }

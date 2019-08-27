@@ -6,6 +6,7 @@ body {
 
 main {
   flex: 1 0 auto;
+  background: url(/public/images/background.png);
 }
 a {
   color: #00B7FF;
@@ -17,4 +18,27 @@ a {
 
 nav .brand-logo{
   margin-left: 10px;
+}
+
+.complete {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  background-color: #00B7FF;
+}
+
+.incomplete {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  background-color: white;
+}
+
+input[type="checkbox"], input[type="checkbox"]:not(:checked), input[type="checkbox"]:checked{
+  opacity: 1;
+  position: relative;
+}
+
+.habit-check{
+  font-size: 20px;
 }
