@@ -19,7 +19,8 @@ function index(req, res, next){
       habits: req.user.habits,
       month: getCurrentMonth(),
       today: getCurrentDay(),
-      title: `${req.user.name.substring(0, req.user.name.indexOf(" "))}'s Habits`
+      title: `${req.user.name.substring(0, req.user.name.indexOf(" "))}'s Habits`,
+      nav: 'Today'
     });
   } else {
     res.render('habits/index', {
@@ -27,7 +28,8 @@ function index(req, res, next){
       habits: null,
       month: null,
       today: null,
-      title: 'Praxis'
+      title: 'Praxis',
+      nav: 'Today'
     })
   }
 }
@@ -36,7 +38,8 @@ function index(req, res, next){
 function newHabit(req, res, next){
   res.render('habits/new', {
     user: req.user,
-    title: 'Add A New Habit'
+    title: 'Add A New Habit',
+    nav: 'New'
   });
 }
 
@@ -87,7 +90,8 @@ function edit(req, res){
         user: req.user,
         title: 'Update Habit',
         name: habit.name,
-        category: habit.category
+        category: habit.category,
+        nav: 'Edit'
       });
     }
   })
@@ -106,21 +110,16 @@ function update(req, res){
   });
 }
 
+// To mark a habit complete, find the checked habits and traverse users' habits for current month/day
 function complete(req, res){
   let today = getCurrentDay();
   let completedHabits = Object.keys(req.body);
-  let hidx = [];
-  let midx = [];
 
   req.user.habits.forEach((h, habitIndex) => {
     if(completedHabits.includes(h.name)){
       h.months.forEach((m, monthIndex) => {
         if(today.m === m.month){
-          hidx.push(habitIndex);
-          midx.push(monthIndex);
-          console.log(today.date);
-          req.user.habits[habitIndex].months[monthIndex].days[today.date - 1] = true;
-          // console.log(m.days[today.date - 1], '///////////////');
+          req.user.habits[habitIndex].months[monthIndex].days.set((today.date - 1), true);
         }
       });
     }
@@ -128,10 +127,7 @@ function complete(req, res){
 
   req.user.save()
     .then(() => {
-      console.log(req.user);
       res.redirect('/habits');
-      console.log(req.user.habits[hidx[0]].name, '########## OUTSIDE ##########');
-      console.log(req.user.habits[hidx[0]].months[midx[0]].days, '/////////// OUTSIDE /////////');
     })
     .catch(err => {
       console.log(err);
@@ -147,7 +143,8 @@ function all(req, res){
     month,
     daysInMonth,
     today: getCurrentDay(),
-    title: `All Habits`
+    title: `All Habits`,
+    nav: 'All Habits'
   });
 }
 
