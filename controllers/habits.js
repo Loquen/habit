@@ -28,7 +28,7 @@ function index(req, res, next){
       habits: null,
       month: null,
       today: null,
-      title: 'All Habits'
+      title: 'Praxis'
     })
   }
 }
@@ -119,19 +119,22 @@ function complete(req, res){
   let completedHabits = Object.keys(req.body);
 
   User.findById(req.user.id, function(err, user){
-    console.log(user.habits);
-    for(h in user.habits){
+    user.habits.forEach((h, habitIndex) => {
       if(completedHabits.includes(h.name)){
-        h.months.forEach(m => {
-          if(today.month === m.month){
-            m.days[today.date - 1] = true;
-            // user.save(function(err){
-              res.redirect('/habits');
-            // });
+        h.months.forEach((m, monthIndex) => {
+          if(today.m === m.month){
+            console.log(today.date);
+            user.habits[habitIndex].months[monthIndex].days[today.date - 1] = true;
+            // console.log(m.days[today.date - 1], '///////////////');
+            user.save(function(err){
+              console.log(user.habits[habitIndex].name, '####################');
+              console.log(user.habits[habitIndex].months[monthIndex].days, '////////////////////');
+            });
           }
         });
       }
-    };
+    });
+    res.redirect('/habits');
   });
 }
 
@@ -153,6 +156,7 @@ function getCurrentDay(){
     day: date.format('ddd'),
     dayOfWeek: date.format('d'),
     do: date.format('Do'),
+    m: parseInt(date.format('M')),
     month: date.format('MMM')
   };
   return today;
