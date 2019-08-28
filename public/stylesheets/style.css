@@ -24,6 +24,17 @@ a {
 
 nav .brand-logo {
   margin-left: 10px;
+  font-size: 2.5rem;
+  font-weight: bold;
+
+}
+
+nav ul a {
+  font-size: 1.5rem;
+}
+
+nav {
+  font-family: 'Roboto', sans-serif;
 }
 
 .complete {
@@ -31,6 +42,13 @@ nav .brand-logo {
   width: 30px;
   height: 30px;
   background-color: #00B7FF;
+}
+
+.today-complete {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  background-color: #F44336 ;
 }
 
 .incomplete {
@@ -43,4 +61,8 @@ nav .brand-logo {
 #delete-btn {
   margin: 10px;
   display: inline-block;
+}
+
+.card-content span {
+  font-size: 1.5rem;
 }

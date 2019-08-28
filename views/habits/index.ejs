@@ -13,7 +13,8 @@
                     <th><%= today.month %> <%= today.date - 3 %></th>
                     <th><%= today.month %> <%= today.date - 2 %></th>
                     <th><%= today.month %> <%= today.date - 1 %></th>
-                    <th class="red-text">Today</th>
+                    <th class="red-text"><%= today.month %> <%= today.date %></th>
+                    <th><div></div></th>
                   </thead>
                 <% habits.forEach(habit => { %>        
                   <% habit.months.forEach( m => { %>
@@ -26,7 +27,11 @@
                           <% if(i === today.date - 3 || i === today.date - 2|| i === today.date - 1|| i === today.date ){ %>
                             <td>
                             <% if(day){ %>
-                              <div class="complete"></div>
+                              <% if(i === today.date) { %>
+                                <div class="today-complete"></div> 
+                              <% } else { %>
+                                <div class="complete"></div>
+                              <% } %>
                             <% } else { %>
                               <div class="incompete"></div>
                             <% } %>
@@ -80,7 +85,9 @@
                 <% }); %>
               </div>
               <div class="card-action">
-                <input type="submit" class="waves-effect waves-light btn" value="Submit Habits">
+                <button class="btn waves-effect waves-light" type="submit" name="action">Submit Habits
+                  <i class="material-icons right">send</i>
+                </button>
               </div>
             </form>
           </div>

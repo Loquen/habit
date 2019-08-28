@@ -13,14 +13,12 @@ module.exports = {
 
 function index(req, res, next){
   if(req.user){
-    User.findById(req.user.id, function(err, user){
-      res.render('habits/index', {
-        user: req.user,
-        habits: user.habits,
-        month: getCurrentMonth(),
-        today: getCurrentDay(),
-        title: `${req.user.name.substring(0, req.user.name.indexOf(" "))}'s Habits`
-      });
+    res.render('habits/index', {
+      user: req.user,
+      habits: req.user.habits,
+      month: getCurrentMonth(),
+      today: getCurrentDay(),
+      title: `${req.user.name.substring(0, req.user.name.indexOf(" "))}'s Habits`
     });
   } else {
     res.render('habits/index', {
@@ -45,97 +43,100 @@ function newHabit(req, res, next){
 function create(req, res, next){
   let newHabit = req.body;
   let newMonth = {};
-  // let month = new Date;
-  // month = month.getMonth() + 1;
+
   newMonth.month = getCurrentMonth();
   let numberOfDays = getNumberOfDays(newMonth.month);
   let days = new Array(numberOfDays).fill(false);
   newMonth.days = days;
   newHabit.months = new Array(newMonth);
 
-  // console.log(newMonth, '//////////////');
-  User.findById(req.user.id, function(err, user){
-    user.habits.push(newHabit);
-    user.save(function(err){
+  req.user.habits.push(newHabit);
+  req.user.save()
+    .then(() => {
       res.redirect('/habits');
     })
-  });
-  // res.redirect('/habits');
+    .catch(err => {
+      console.log(err);
+      res.redirect('/habits');
+    });
 }
 
 function deleteHabit(req, res, next){
-  console.log(req.params.id);
-  User.findById(req.user.id, function(err, user){
-    if(err) {
-      return res.render('habits');
-    }
-
-    user.habits.forEach((habit,idx) => {
-      if(habit.id === req.params.id){
-        console.log(habit);
-        user.habits.splice(idx, 1);
-        user.save(function(err){
+  req.user.habits.forEach((habit,idx) => {
+    if(habit.id === req.params.id){
+      console.log(habit);
+      req.user.habits.splice(idx, 1);
+      req.user.save()
+        .then(user => {
+          res.redirect('/habits');
+        })
+        .catch(err => {
+          console.log(err);
           res.redirect('/habits');
         });
-      }
-    });
+    }
   });
 }
 
 function edit(req, res){
-  User.findById(req.user.id, function(err, user){
-    user.habits.forEach((habit, idx) => {
-      if(habit.id === req.params.id){
-        res.render('habits/edit', {
-          habit,
-          user: req.user,
-          title: 'Update Habit',
-          name: habit.name,
-          category: habit.category
-        });
-      }
-    })
-  });
+  req.user.habits.forEach((habit, idx) => {
+    if(habit.id === req.params.id){
+      res.render('habits/edit', {
+        habit,
+        user: req.user,
+        title: 'Update Habit',
+        name: habit.name,
+        category: habit.category
+      });
+    }
+  })
 }
 
 function update(req, res){
-  User.findById(req.user.id, function(err, user){
-    // Loop through habits looking for req.params.id
-    user.habits.forEach((habit, idx) => {
-      if(habit.id === req.params.id){
-        habit.name = req.body.name;
-        habit.category = req.body.category;
-        // console.log(req.body.name, req.body.category);
-        user.save(function(err){
-          res.redirect('/habits');
-        });
-      }
-    });
+  // Loop through habits looking for req.params.id
+  req.user.habits.forEach((habit, idx) => {
+    if(habit.id === req.params.id){
+      habit.name = req.body.name;
+      habit.category = req.body.category;
+      req.user.save(function(err){
+        res.redirect('/habits');
+      });
+    }
   });
 }
 
 function complete(req, res){
   let today = getCurrentDay();
   let completedHabits = Object.keys(req.body);
+  let hidx = [];
+  let midx = [];
 
-  User.findById(req.user.id, function(err, user){
-    user.habits.forEach((h, habitIndex) => {
+  // User.findById(req.user.id, function(err, user){
+    req.user.habits.forEach((h, habitIndex) => {
       if(completedHabits.includes(h.name)){
         h.months.forEach((m, monthIndex) => {
           if(today.m === m.month){
+            hidx.push(habitIndex);
+            midx.push(monthIndex);
             console.log(today.date);
-            user.habits[habitIndex].months[monthIndex].days[today.date - 1] = true;
+            req.user.habits[habitIndex].months[monthIndex].days[today.date - 1] = true;
             // console.log(m.days[today.date - 1], '///////////////');
-            user.save(function(err){
-              console.log(user.habits[habitIndex].name, '####################');
-              console.log(user.habits[habitIndex].months[monthIndex].days, '////////////////////');
-            });
+          
           }
         });
       }
     });
-    res.redirect('/habits');
-  });
+    req.user.save()
+    .then(user => {
+      console.log(user);
+      res.redirect('/habits');
+      console.log(req.user.habits[hidx[0]].name, '########## OUTSIDE ##########');
+      console.log(req.user.habits[hidx[0]].months[midx[0]].days, '/////////// OUTSIDE /////////');
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  // });
 }
 
 /********** HELPER FUNCTIONS *********/
@@ -152,12 +153,12 @@ function getNumberOfDays(month){
 function getCurrentDay(){
   let date = moment();
   let today = {
-    date: parseInt(date.format('D')),
-    day: date.format('ddd'),
-    dayOfWeek: date.format('d'),
-    do: date.format('Do'),
-    m: parseInt(date.format('M')),
-    month: date.format('MMM')
+    date: parseInt(date.format('D')), // Number
+    day: date.format('ddd'), // Sun
+    dayOfWeek: date.format('d'), // Number
+    do: date.format('Do'), // 1st
+    m: parseInt(date.format('M')), // Number
+    month: date.format('MMM') // Aug
   };
   return today;
 }
