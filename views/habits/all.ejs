@@ -1,0 +1,61 @@
+<%- include('../partials/header') %>
+
+<div class="row">
+  <div class="col m12 l12">
+    <div class="card horizontal">
+      <div class="card-stacked">
+        <div class="card-content">        
+          <div>
+            <h4><%= today.month %></h4>
+            <table>
+              <thead>
+                <th>Habit</th>
+                <% for(let i = 1; i <= daysInMonth; i++){ %>
+                  <th><%= i %></th>
+                <% } %>
+                
+                <!-- <th class="red-text"><%= today.month %> <%= today.date %></th> -->
+                <th><div></div></th>
+              </thead>
+            <% habits.forEach(habit => { %>        
+              <% habit.months.forEach( m => { %>
+                <% if(month === m.month){ %>
+                  <tr>
+                    <td>
+                      <%= habit.name %>
+                    </td>
+                    <% m.days.forEach((day, i) => { %>
+                      <td>
+                      <% if(day){ %>
+                        <% if(i === today.date - 1) { %>
+                          <div class="all-today-complete"></div> 
+                        <% } else { %>
+                          <div class="all-complete"></div>
+                        <% } %>
+                      <% } else { %>
+                        <div class="all-incomplete"></div>
+                      <% } %>
+                      </td>
+
+                  <% }); %> 
+                <% } %>
+              <% }); %> 
+              <td>
+            </td>
+            <td>
+              <a href="/habits/<%= habit.id %>"><i class="material-icons">create</i></a>
+            </td>
+            </tr>
+            <% }); %> 
+          </table>
+          </div>
+        </div>
+        <div class="card-action">
+          <a href="/habits/new" class="waves-effect waves-light btn">Add Habit</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

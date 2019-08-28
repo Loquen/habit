@@ -5,6 +5,7 @@ var habitsCtrl = require('../controllers/habits');
 // GET /all Habits
 router.get('/habits', habitsCtrl.index);
 router.get('/habits/new', isLoggedIn, habitsCtrl.new);
+router.get('/habits/all', isLoggedIn, habitsCtrl.all);
 router.get('/habits/:id', isLoggedIn, habitsCtrl.edit);
 router.post('/habits', isLoggedIn, habitsCtrl.create);
 router.put('/habits/complete', isLoggedIn, habitsCtrl.complete);

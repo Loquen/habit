@@ -9,7 +9,7 @@
               <div>
                 <table>
                   <thead>
-                    <th></th>
+                    <th>Habit</th>
                     <th><%= today.month %> <%= today.date - 3 %></th>
                     <th><%= today.month %> <%= today.date - 2 %></th>
                     <th><%= today.month %> <%= today.date - 1 %></th>
@@ -24,10 +24,10 @@
                           <%= habit.name %>
                         </td>
                         <% m.days.forEach((day, i) => { %>
-                          <% if(i === today.date - 3 || i === today.date - 2|| i === today.date - 1|| i === today.date ){ %>
+                          <% if(i === today.date - 4 || i === today.date - 3 || i === today.date - 2 || i === today.date - 1){ %>
                             <td>
                             <% if(day){ %>
-                              <% if(i === today.date) { %>
+                              <% if(i === today.date - 1) { %>
                                 <div class="today-complete"></div> 
                               <% } else { %>
                                 <div class="complete"></div>
@@ -65,7 +65,7 @@
                 <% habits.forEach(habit => { %>
                   <% habit.months.forEach(m => { %>
                     <% if(month === m.month) { %>
-                      <% if(m.days[today.date]) { %>
+                      <% if(m.days[today.date - 1]) { %>
                         <div>
                           <label for="<%= habit.name %>" >
                             <input type="checkbox" id="<%= habit.name %>" name="<%= habit.name %>" value="true" checked="checked"/>

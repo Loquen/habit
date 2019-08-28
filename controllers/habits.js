@@ -8,7 +8,8 @@ module.exports = {
   delete: deleteHabit,
   edit,
   update,
-  complete
+  complete,
+  all
 };
 
 function index(req, res, next){
@@ -111,24 +112,23 @@ function complete(req, res){
   let hidx = [];
   let midx = [];
 
-  // User.findById(req.user.id, function(err, user){
-    req.user.habits.forEach((h, habitIndex) => {
-      if(completedHabits.includes(h.name)){
-        h.months.forEach((m, monthIndex) => {
-          if(today.m === m.month){
-            hidx.push(habitIndex);
-            midx.push(monthIndex);
-            console.log(today.date);
-            req.user.habits[habitIndex].months[monthIndex].days[today.date - 1] = true;
-            // console.log(m.days[today.date - 1], '///////////////');
-          
-          }
-        });
-      }
-    });
-    req.user.save()
-    .then(user => {
-      console.log(user);
+  req.user.habits.forEach((h, habitIndex) => {
+    if(completedHabits.includes(h.name)){
+      h.months.forEach((m, monthIndex) => {
+        if(today.m === m.month){
+          hidx.push(habitIndex);
+          midx.push(monthIndex);
+          console.log(today.date);
+          req.user.habits[habitIndex].months[monthIndex].days[today.date - 1] = true;
+          // console.log(m.days[today.date - 1], '///////////////');
+        }
+      });
+    }
+  });
+
+  req.user.save()
+    .then(() => {
+      console.log(req.user);
       res.redirect('/habits');
       console.log(req.user.habits[hidx[0]].name, '########## OUTSIDE ##########');
       console.log(req.user.habits[hidx[0]].months[midx[0]].days, '/////////// OUTSIDE /////////');
@@ -136,7 +136,19 @@ function complete(req, res){
     .catch(err => {
       console.log(err);
     });
-  // });
+}
+
+function all(req, res){
+  let month = getCurrentMonth();
+  let daysInMonth = getNumberOfDays(month);
+  res.render('habits/all', {
+    user: req.user,
+    habits: req.user.habits,
+    month,
+    daysInMonth,
+    today: getCurrentDay(),
+    title: `All Habits`
+  });
 }
 
 /********** HELPER FUNCTIONS *********/

@@ -44,11 +44,32 @@ nav {
   background-color: #00B7FF;
 }
 
+.all-complete {
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  background-color: #00B7FF;
+}
+
 .today-complete {
   border-radius: 50%;
   width: 30px;
   height: 30px;
   background-color: #F44336 ;
+}
+
+.all-today-complete {
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  background-color: #F44336 ;
+}
+
+.all-incomplete {
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  background-color: white;
 }
 
 .incomplete {
