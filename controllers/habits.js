@@ -15,8 +15,16 @@ module.exports = {
 function index(req, res, next){
   // Only populate habits object with habits in the correct category
   let habits = [];
+  let categories = new Set(); // Sets only allow an item to occur once
+  let month = getCurrentMonth();
   
   if(req.user){
+    req.user.habits.forEach(h => {
+      h.months.forEach(m => {
+        if(month === m.month) categories.add(h.category);
+      });
+    });
+    // console.log(categories);
     if(req.query.category && req.query.category !== 'All Habits'){ // We have a valid query
       req.user.habits.forEach(h => {
         if(h.category === req.query.category){ // The current habit is in the queried category
@@ -31,7 +39,8 @@ function index(req, res, next){
       user: req.user,
       habits,
       allHabits: req.user.habits,
-      month: getCurrentMonth(),
+      categories: Array.from(categories).sort(),
+      month,
       today: getCurrentDay(),
       title: `${req.user.name.substring(0, req.user.name.indexOf(" "))}'s Habits`,
       nav: 'Today'
@@ -42,6 +51,7 @@ function index(req, res, next){
       habits: null,
       month: null,
       today: null,
+      categories: null,
       title: 'Praxis',
       nav: 'Today'
     })
@@ -150,9 +160,17 @@ function complete(req, res){
 
 function all(req, res){
   let month = parseInt(req.query.month);
-  let alternate = getCurrentMonth();
+  // let alternate = getCurrentMonth();
   let daysInMonth = getNumberOfDays(month);
   let habits = [];
+  let monthsFilter = new Set(); // Sets only allow an item to occur once
+
+  req.user.habits.forEach(h => {
+    h.months.forEach(m => {
+      monthsFilter.add(m.month);
+    });
+  });
+
   if(req.query.month && req.query.month !== 'All Months'){ // We have a valid query
     req.user.habits.forEach(h => {
       h.months.forEach(m => {
@@ -166,7 +184,7 @@ function all(req, res){
     month = getCurrentMonth();
     daysInMonth = getNumberOfDays(month);
   }
-  console.log(habits);
+  // console.log(habits);
   
   res.render('habits/all', {
     user: req.user,
@@ -174,6 +192,7 @@ function all(req, res){
     allHabits: req.user.habits,
     month,
     daysInMonth,
+    monthsFilter: Array.from(monthsFilter).sort((a, b) =>  b-a),
     today: getCurrentDay(),
     title: `All Habits`,
     nav: 'All Habits'

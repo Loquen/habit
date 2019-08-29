@@ -6,22 +6,24 @@
       <div class="card-stacked">
         <div class="card-content">  
             <div class="row">
-                <form action="/habits/all" method="GET">
+              <form action="/habits/all" method="GET">
+                <div class="col l2 offset-l8">
                   <select name="month">
+                    <% monthsFilter.forEach(m => { %>
+                      <div>
+                        <option value="<%= m %>"><%= m %></option>
+                      </div>
+                    <% }); %>
                     <div>
                       <option value="All Months">All Months</option>
                     </div>
-                      <% habits.forEach(habit => { %>
-                        <% habit.months.forEach(m => { %>
-                            <div>
-                              <option value="<%= m.month %>"><%= m.month %></option>
-                            </div>
-                        <% }); %>
-                      <% }); %>
-                    </select> 
+                  </select> 
+                </div>
+                  <div class="col l2">
                     <button type="submit" class="waves-effect waves-light btn">Filter By Category</button> 
-                  </form>            
-              </div>       
+                  </div>
+              </form> 
+          </div>                 
           <div class="row">
             <h4><%= today.month %></h4>
             <table>

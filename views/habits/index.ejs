@@ -8,22 +8,22 @@
             <div class="card-content">  
               <div class="row">
                 <form action="/habits" method="GET">
-                  <select name="category">
-                    <div>
-                      <option value="All Habits">All Habits</option>
-                    </div>
-                      <% allHabits.forEach(habit => { %>
-                        <% habit.months.forEach(m => { %>
-                          <% if(month === m.month) { %>
-                            <div>
-                              <option value="<%= habit.category %>"><%= habit.category %></option>
-                            </div>
-                          <% } %>
-                        <% }); %>
+                  <div class="col l2 offset-l8">
+                    <select name="category">
+                      <% categories.forEach(category => { %>
+                        <div>
+                          <option value="<%= category %>"><%= category %></option>
+                        </div>
                       <% }); %>
+                      <div>
+                        <option value="All Habits">All Habits</option>
+                      </div>
                     </select> 
+                  </div>
+                  <div class="col l2">
                     <button type="submit" class="waves-effect waves-light btn">Filter By Category</button> 
-                  </form>            
+                  </div>
+                </form>  
               </div>      
               <div class="row">
                 <table>
@@ -75,9 +75,9 @@
           </div>
         </div>
       </div>
-      <div class="col m12 l4">`
-        <div class="card horizon`tal">
-          <div class="card-stack`ed">
+      <div class="col m12 l4">
+        <div class="card horizontal">
+          <div class="card-stacked">
             <form action="/habits/complete?_method=PUT" method="POST">
               <div class="card-content">
                 <h4>Habits For Today:</h4> 
