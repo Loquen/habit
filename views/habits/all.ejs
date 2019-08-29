@@ -5,32 +5,36 @@
     <div class="card horizontal">
       <div class="card-stacked">
         <div class="card-content">  
-            <div class="row">
-              <form action="/habits/all" method="GET">
-                <div class="col l2 offset-l8">
-                  <select name="month">
-                    <% monthsFilter.forEach(m => { %>
-                      <div>
-                        <option value="<%= m %>"><%= m %></option>
-                      </div>
-                    <% }); %>
+          <div class="row">
+            <form action="/habits/all" method="GET">
+              <div class="col l2 offset-l8">
+                <select name="month">
+                  <% monthsFilter.forEach(m => { %>
                     <div>
-                      <option value="All Months">All Months</option>
+                      <option value="<%= m %>"><%= m %></option>
                     </div>
-                  </select> 
-                </div>
-                  <div class="col l2">
-                    <button type="submit" class="waves-effect waves-light btn">Filter By Category</button> 
+                  <% }); %>
+                  <div>
+                    <option value="All Months">All Months</option>
                   </div>
-              </form> 
+                </select> 
+              </div>
+                <div class="col l2">
+                  <button type="submit" class="waves-effect waves-light btn">Filter By Category</button> 
+                </div>
+            </form> 
           </div>                 
           <div class="row">
-            <h4><%= today.month %></h4>
+            <h4 class="heading"><%= today.month %></h4>
             <table>
               <thead>
                 <th>Habit</th>
                 <% for(let i = 1; i <= daysInMonth; i++){ %>
-                  <th><%= i %></th>
+                  <% if(i === today.date) { %>
+                    <th class="red-text"><%= i %></th>
+                  <% } else { %> 
+                    <th><%= i %></th>
+                  <% } %>
                 <% } %>
                 
                 <!-- <th class="red-text"><%= today.month %> <%= today.date %></th> -->

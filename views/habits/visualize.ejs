@@ -1,0 +1,36 @@
+<%- include('../partials/header') %>
+
+<div class="row">
+  <div class="col m12 l10 offset-l1">
+    <div class="card">
+      <div class="card-content">
+        <h4 class="heading"></h4>
+        <div class="row">
+          <form action="/habits/visualize" method="GET">
+            <div class="col l2 offset-l8">
+              <select name="habit">
+                <% habitFilter.forEach(h => { %>
+                  <div>
+                    <option value="<%= h %>"><%= h %></option>
+                  </div>
+                <% }); %>
+              </select> 
+            </div>
+              <div class="col l2">
+                <button type="submit" class="waves-effect waves-light btn">View Habit</button> 
+              </div>
+          </form> 
+        </div>  
+        <div>
+          <h3 class="heading"><%= habit.name %></h3>
+          <h5>Total: <%= habit.total %></h5>
+          <h5>Longest Streak: <%= habit.streak %></h5>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

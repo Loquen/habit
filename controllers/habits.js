@@ -9,10 +9,11 @@ module.exports = {
   edit,
   update,
   complete,
-  all
+  all,
+  visualize
 };
 
-function index(req, res, next){
+function index(req, res){
   // Only populate habits object with habits in the correct category
   let habits = [];
   let categories = new Set(); // Sets only allow an item to occur once
@@ -31,7 +32,7 @@ function index(req, res, next){
           habits.push(h);
         }
       });
-    } else { // No query or All Habits, render all habits
+    }else{ // No query or All Habits, render all habits
       habits = req.user.habits;
     }
 
@@ -45,7 +46,7 @@ function index(req, res, next){
       title: `${req.user.name.substring(0, req.user.name.indexOf(" "))}'s Habits`,
       nav: 'Today'
     });
-  } else {
+  }else{
     res.render('habits/index', {
       user: null,
       habits: null,
@@ -59,7 +60,7 @@ function index(req, res, next){
 }
 
 // Render new habit page
-function newHabit(req, res, next){
+function newHabit(req, res){
   res.render('habits/new', {
     user: req.user,
     title: 'Add A New Habit',
@@ -68,14 +69,16 @@ function newHabit(req, res, next){
 }
 
 // Create a new habit
-function create(req, res, next){
+function create(req, res){
   let newHabit = req.body;
   let newMonth = {};
+  let today = getCurrentDay();
 
   newMonth.month = getCurrentMonth();
   let numberOfDays = getNumberOfDays(newMonth.month);
   let days = new Array(numberOfDays).fill(false);
   newMonth.days = days;
+  newMonth.year = today.year;
   newHabit.months = new Array(newMonth);
 
   req.user.habits.push(newHabit);
@@ -89,7 +92,7 @@ function create(req, res, next){
     });
 }
 
-function deleteHabit(req, res, next){
+function deleteHabit(req, res){
   req.user.habits.forEach((habit,idx) => {
     if(habit.id === req.params.id){
       console.log(habit);
@@ -138,13 +141,19 @@ function update(req, res){
 function complete(req, res){
   let today = getCurrentDay();
   let completedHabits = Object.keys(req.body);
+  completedHabits = completedHabits.slice(0, completedHabits.length-1);
 
   req.user.habits.forEach((h, habitIndex) => {
     if(completedHabits.includes(h.name)){
       h.months.forEach((m, monthIndex) => {
-        if(today.m === m.month){
-          req.user.habits[habitIndex].months[monthIndex].days.set((today.date - 1), true);
-        }
+        if(today.m === m.month) req.user.habits[habitIndex].months[monthIndex].days.set((today.date - 1), true);
+        // if(today.m === m.month){
+        //   req.user.habits[habitIndex].months[monthIndex].days.set((today.date - 1), true);
+        // }
+      });
+    }else{
+      h.months.forEach((m, monthIndex) => {
+        if(today.m === m.month) req.user.habits[habitIndex].months[monthIndex].days.set((today.date - 1), false);
       });
     }
   });
@@ -179,7 +188,7 @@ function all(req, res){
         }
       });
     });
-  } else { // No query or All Habits, render all habits
+  }else{ // No query or All Habits, render all habits
     habits = req.user.habits;
     month = getCurrentMonth();
     daysInMonth = getNumberOfDays(month);
@@ -196,6 +205,64 @@ function all(req, res){
     today: getCurrentDay(),
     title: `All Habits`,
     nav: 'All Habits'
+  });
+}
+
+function visualize(req, res){
+  let habits = new Object();
+  let habit = {};
+
+  req.user.habits.forEach((habit, idx) => {
+    habits[habit.name] = {
+          total: 0,
+          streak: 0,
+          dayTotal: {
+            'Sun': 0, // Sunday
+            'Mon': 0,
+            'Tue': 0,
+            'Wed': 0,
+            'Thu': 0,
+            'Fri': 0,
+            'Sat': 0 // Monday
+          }
+        }
+    currentStreak = 0;
+    habit.months.forEach(month => {
+      month.days.forEach((day, idx) => {
+        if(day){
+          habits[habit.name].total++; // Increment the total
+          if(habits[habit.name].streak === 0 && currentStreak === 0){ // First streak
+            habits[habit.name].streak = 1;
+          }else if(habits[habit.name].streak > currentStreak && month.days[idx-1]){
+            habits[habit.name].streak++;
+          }
+          let dayOfWeek = moment({
+            y: month.year,
+            M: month.month - 1,
+            d: idx + 1
+          }).format('ddd');
+          habits[habit.name].dayTotal[dayOfWeek]++;
+        }else{
+          currentStreak = 0;
+        }
+      });
+    });
+  });
+  if(req.query.habit){
+    habit = habits[req.query.habit];
+    habit.name = req.query.habit;
+  } else {
+    habit = Object.values(habits)[0];
+    habit.name = Object.keys(habits)[0];
+  }
+
+  console.log(habits[req.query.habit]);
+  res.render('habits/visualize',{
+    user: req.user,
+    habit,
+    habitFilter: Object.keys(habits),
+    title: `Visualize Your Habits`,
+    nav: 'Visualize'
   });
 }
 
@@ -218,7 +285,8 @@ function getCurrentDay(){
     dayOfWeek: date.format('d'), // Number
     do: date.format('Do'), // 1st
     m: parseInt(date.format('M')), // Number
-    month: date.format('MMM') // Aug
+    month: date.format('MMM'), // Aug
+    year: date.format('YYYY')
   };
   return today;
 }

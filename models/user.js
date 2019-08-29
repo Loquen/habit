@@ -5,6 +5,10 @@ var monthSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  year: {
+    type: Number,
+    required: true
+  },
   days: [{
     type: Boolean,
     default: false,
