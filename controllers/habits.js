@@ -149,11 +149,29 @@ function complete(req, res){
 }
 
 function all(req, res){
-  let month = getCurrentMonth();
+  let month = parseInt(req.query.month);
+  let alternate = getCurrentMonth();
   let daysInMonth = getNumberOfDays(month);
+  let habits = [];
+  if(req.query.month && req.query.month !== 'All Months'){ // We have a valid query
+    req.user.habits.forEach(h => {
+      h.months.forEach(m => {
+        if(m.month.toString() === req.query.month){ // The current habit is in the queried month
+          habits.push(h);
+        }
+      });
+    });
+  } else { // No query or All Habits, render all habits
+    habits = req.user.habits;
+    month = getCurrentMonth();
+    daysInMonth = getNumberOfDays(month);
+  }
+  console.log(habits);
+  
   res.render('habits/all', {
     user: req.user,
-    habits: req.user.habits,
+    habits,
+    allHabits: req.user.habits,
     month,
     daysInMonth,
     today: getCurrentDay(),
