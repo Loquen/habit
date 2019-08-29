@@ -13,10 +13,24 @@ module.exports = {
 };
 
 function index(req, res, next){
+  // Only populate habits object with habits in the correct category
+  let habits = [];
+  
   if(req.user){
+    if(req.query.category && req.query.category !== 'All Habits'){ // We have a valid query
+      req.user.habits.forEach(h => {
+        if(h.category === req.query.category){ // The current habit is in the queried category
+          habits.push(h);
+        }
+      });
+    } else { // No query or All Habits, render all habits
+      habits = req.user.habits;
+    }
+
     res.render('habits/index', {
       user: req.user,
-      habits: req.user.habits,
+      habits,
+      allHabits: req.user.habits,
       month: getCurrentMonth(),
       today: getCurrentDay(),
       title: `${req.user.name.substring(0, req.user.name.indexOf(" "))}'s Habits`,
