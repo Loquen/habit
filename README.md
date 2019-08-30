@@ -9,7 +9,7 @@ It can be hard to keep track of your habits in the bustle of city life. Introduc
 ### The Reward:
  This is the part of the habit loop where your brain receives a reward for taking the desired activity (or not as you will see in just a second).
 
-On average, it takes more than 2 months before a new behavior becomes automatic — 66 days to be exact. And how long it takes anew habit to form can vary widely depending on the behavior, the person, and the circumstances. In Lally's study, it took anywhere from 18 days to 254 days for people to form a new habit. [Check out James Clear's site for more info](https://jamesclear.com/new-habit)
+On average, it takes more than 2 months before a new behavior becomes automatic — 66 days to be exact. And how long it takes a new habit to form can vary widely depending on the behavior, the person, and the circumstances. In Lally's study, it took anywhere from 18 days to 254 days for people to form a new habit. Check out James Clear's [site](https://jamesclear.com/new-habit) for more info. Another great resource is Charles Duhigg's ['The Power of Habit'](https://charlesduhigg.com/how-habits-work/).
 
 ## Screenshots:
 
@@ -28,7 +28,7 @@ On average, it takes more than 2 months before a new behavior becomes automatic 
   - OAuth
 
 ## Getting Started: How to Use
-  - [To Play](https://loquen.github.io/habit/)
+  - [To Track Your Habits](https://praxis-lrj.herokuapp.com/)
   - Login with Google
   - Create habits and keep track for today.
   - View all your habits for the month in the All Habits page
