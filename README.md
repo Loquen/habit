@@ -1,7 +1,7 @@
 # Praxis
 It can be hard to keep track of your habits in the bustle of city life. Introducing, Praxis, a webpage to help you keep track and visualize your habits. You can start new habits and see how far you’ve come along in your habit-building journey.  
 
-##All habits can be broken down into three basic components:
+## All habits can be broken down into three basic components:
 ### The Cue or Trigger:
  This is the part of the habit loop where you are triggered to take some sort of action through a cue in your internal or external environment.
 ### The Action:
@@ -13,8 +13,10 @@ On average, it takes more than 2 months before a new behavior becomes automatic 
 
 ## Screenshots:
 
-![Checkers Layout](https://i.imgur.com/jokmAuF.png "Checkers")
-![Checkers Win Layout](https://i.imgur.com/Tdu8amy.png "Checkers Win")
+![Main Page](https://imgur.com/6gfbblv.png "Main Page")
+![Visualize Page](https://imgur.com/Iyt3lyB.png "Visualize Page")
+![All Habits Page](https://imgur.com/7cVkfSJ.png "All Habits Page")
+![Update Page](https://imgur.com/TK8YBf4.png "Update Page")
 
 ## Technologies Used: 
   - JavaScript 
