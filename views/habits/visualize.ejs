@@ -1,13 +1,13 @@
 <%- include('../partials/header') %>
 
 <div class="row">
-  <div class="col m12 l10 offset-l1">
+  <div class="col m12 l8 offset-l2">
     <div class="card">
       <div class="card-content">
         <h4 class="heading"></h4>
         <div class="row">
           <form action="/habits/visualize" method="GET">
-            <div class="col l2 offset-l8">
+            <div class="col m6 l2 offset-l8">
               <select name="habit">
                 <% habitFilter.forEach(h => { %>
                   <div>
@@ -16,18 +16,56 @@
                 <% }); %>
               </select> 
             </div>
-              <div class="col l2">
-                <button type="submit" class="waves-effect waves-light btn">View Habit</button> 
-              </div>
+            <div class="col m6 l2">
+              <button type="submit" class="waves-effect waves-light btn">View Habit</button> 
+            </div>
           </form> 
         </div>  
-        <div>
-          <h3 class="heading"><%= habit.name %></h3>
-          <h5>Total: <%= habit.total %></h5>
-          <h5>Longest Streak: <%= habit.streak %></h5>
-
+        <div class="row">
+          <div class="col m12 l3 offset-l1">
+            <h4><%= habit.name %></h4>
+          </div>
+          <div class="col m12 l3">
+            <h4>Total: <%= habit.total %></h4>
+          </div>
+          <div class="col m12 l4">
+            <h4>Best Streak: <%= habit.streak %></h4>
+          </div>  
         </div>
-
+          <canvas id="bar-chart-horizontal" width="800" height="450"></canvas>
+          <div class="col m12 l5">
+          </div>
+          <script>
+            new Chart(document.getElementById("bar-chart-horizontal"), {
+              type: 'horizontalBar',
+              data: {
+                labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                datasets: [
+                  {
+                    label: "Completion of habit by days of the Week",
+                    backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+                    data: [
+                      <%- habit.dayTotal['Sun'] %>,
+                      <%- habit.dayTotal['Mon'] %>,
+                      <%- habit.dayTotal['Tue'] %>,
+                      <%- habit.dayTotal['Wed'] %>,
+                      <%- habit.dayTotal['Thu'] %>,
+                      <%- habit.dayTotal['Fri'] %>,
+                      <%- habit.dayTotal['Sat'] %>
+                    ]
+                  }
+                ]
+              },
+              options: {
+                legend: { display: false },
+                title: {
+                  display: true,
+                  text: 'Completion of habit by days of the Week'
+                }
+              }
+            });
+          </script>
+        </div>
       </div>
     </div>
   </div>
