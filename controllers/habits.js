@@ -1,4 +1,4 @@
-const User = require('../models/user');
+// const User = require('../models/user');
 const moment = require('moment');
 
 module.exports = {
@@ -25,7 +25,6 @@ function index(req, res){
         if(month === m.month) categories.add(h.category);
       });
     });
-    // console.log(categories);
     if(req.query.category && req.query.category !== 'All Habits'){ // We have a valid query
       req.user.habits.forEach(h => {
         if(h.category === req.query.category){ // The current habit is in the queried category
@@ -55,7 +54,7 @@ function index(req, res){
       categories: null,
       title: 'Praxis',
       nav: 'Today'
-    })
+    });
   }
 }
 
@@ -95,7 +94,6 @@ function create(req, res){
 function deleteHabit(req, res){
   req.user.habits.forEach((habit,idx) => {
     if(habit.id === req.params.id){
-      console.log(habit);
       req.user.habits.splice(idx, 1);
       req.user.save()
         .then(user => {
@@ -147,9 +145,6 @@ function complete(req, res){
     if(completedHabits.includes(h.name)){
       h.months.forEach((m, monthIndex) => {
         if(today.m === m.month) req.user.habits[habitIndex].months[monthIndex].days.set((today.date - 1), true);
-        // if(today.m === m.month){
-        //   req.user.habits[habitIndex].months[monthIndex].days.set((today.date - 1), true);
-        // }
       });
     }else{
       h.months.forEach((m, monthIndex) => {
@@ -169,7 +164,6 @@ function complete(req, res){
 
 function all(req, res){
   let month = parseInt(req.query.month);
-  // let alternate = getCurrentMonth();
   let daysInMonth = getNumberOfDays(month);
   let habits = [];
   let monthsFilter = new Set(); // Sets only allow an item to occur once
@@ -193,7 +187,6 @@ function all(req, res){
     month = getCurrentMonth();
     daysInMonth = getNumberOfDays(month);
   }
-  // console.log(habits);
   
   res.render('habits/all', {
     user: req.user,
@@ -217,16 +210,17 @@ function visualize(req, res){
           total: 0,
           streak: 0,
           dayTotal: {
-            'Sun': 0, // Sunday
+            'Sun': 0, 
             'Mon': 0,
             'Tue': 0,
             'Wed': 0,
             'Thu': 0,
             'Fri': 0,
-            'Sat': 0 // Monday
+            'Sat': 0 
           }
         }
     currentStreak = 0;
+
     habit.months.forEach(month => {
       month.days.forEach((day, idx) => {
         if(day){
@@ -248,6 +242,7 @@ function visualize(req, res){
       });
     });
   });
+
   if(req.query.habit){
     habit = habits[req.query.habit];
     habit.name = req.query.habit;
@@ -256,7 +251,6 @@ function visualize(req, res){
     habit.name = Object.keys(habits)[0];
   }
 
-  console.log(habits[req.query.habit]);
   res.render('habits/visualize',{
     user: req.user,
     habit,
@@ -280,13 +274,13 @@ function getNumberOfDays(month){
 function getCurrentDay(){
   let date = moment();
   let today = {
-    date: parseInt(date.format('D')), // Number
+    date: parseInt(date.format('D')), // 29 Number
     day: date.format('ddd'), // Sun
-    dayOfWeek: date.format('d'), // Number
+    dayOfWeek: date.format('d'), // 5 Number
     do: date.format('Do'), // 1st
-    m: parseInt(date.format('M')), // Number
+    m: parseInt(date.format('M')), // 8 Number
     month: date.format('MMM'), // Aug
-    year: date.format('YYYY')
+    year: date.format('YYYY') // 2019 Number
   };
   return today;
 }

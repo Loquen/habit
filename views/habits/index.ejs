@@ -35,38 +35,36 @@
                     <th class="red-text"><%= today.month %> <%= today.date %></th>
                     <th><div></div></th>
                   </thead>
-                <% habits.forEach(habit => { %>        
-                  <% habit.months.forEach( m => { %>
-                    <% if(month === m.month){ %>
-                      <tr>
-                        <td>
-                          <%= habit.name %>
-                        </td>
-                        <% m.days.forEach((day, i) => { %>
-                          <% if(i === today.date - 4 || i === today.date - 3 || i === today.date - 2 || i === today.date - 1){ %>
-                            <td>
-                            <% if(day){ %>
-                              <% if(i === today.date - 1) { %>
-                                <div class="today-complete"></div> 
-                              <% } else { %>
-                                <div class="complete"></div>
+                  <% habits.forEach(habit => { %>        
+                    <% habit.months.forEach( m => { %>
+                      <% if(month === m.month){ %>
+                        <tr>
+                          <td>
+                            <%= habit.name %>
+                          </td>
+                          <% m.days.forEach((day, i) => { %>
+                            <% if(i === today.date - 4 || i === today.date - 3 || i === today.date - 2 || i === today.date - 1){ %>
+                              <td>
+                              <% if(day){ %>
+                                <% if(i === today.date - 1) { %>
+                                  <div class="today-complete"></div> 
+                                <% } else { %>
+                                  <div class="complete"></div>
+                                <% } %>
+                              <% }else{ %>
+                                <div class="incompete"></div>
                               <% } %>
-                            <% } else { %>
-                              <div class="incompete"></div>
+                              </td>
                             <% } %>
-                            </td>
-                          <% } %>
-                      <% }); %> 
-                    <% } %>
+                        <% }); %> 
+                      <% } %>
+                    <% }); %> 
+                    <td>
+                      <a href="/habits/<%= habit.id %>"><i class="material-icons">create</i></a>
+                    </td>
+                  </tr>
                   <% }); %> 
-                  <td>
-                </td>
-                <td>
-                  <a href="/habits/<%= habit.id %>"><i class="material-icons">create</i></a>
-                </td>
-                </tr>
-                <% }); %> 
-              </table>
+                </table>
               </div>
             </div>
             <div class="card-action">
@@ -84,14 +82,14 @@
                 <% habits.forEach(habit => { %>
                   <% habit.months.forEach(m => { %>
                     <% if(month === m.month) { %>
-                      <% if(m.days[today.date - 1]) { %>
+                      <% if(m.days[today.date - 1]){ %>
                         <div>
                           <label for="<%= habit.name %>" >
                             <input type="checkbox" id="<%= habit.name %>" name="<%= habit.name %>" value="true" checked="checked"/>
                             <span><%= habit.name %></span>
                           </label>
                         </div>
-                      <% } else { %>
+                      <% }else{ %>
                         <div>
                           <label for="<%= habit.name %>" >
                             <input type="checkbox" id="<%= habit.name %>" name="<%= habit.name %>"/>
@@ -113,7 +111,7 @@
         </div>
       </div>  
     </div>
-  <% } else { %>
+  <% }else{ %>
     <div class="row">
       <div class="col m12 l8 offset-l2">
         <div class="card horizontal">

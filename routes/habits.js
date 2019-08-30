@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var habitsCtrl = require('../controllers/habits');
 
-// GET /all Habits
 router.get('/habits', habitsCtrl.index);
 router.get('/habits/new', isLoggedIn, habitsCtrl.new);
 router.get('/habits/all', isLoggedIn, habitsCtrl.all);

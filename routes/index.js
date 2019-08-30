@@ -6,7 +6,6 @@ var habitsCtrl = require('../controllers/habits');
 /* GET home page. */
 router.get('/', habitsCtrl.index);
 
-
 // Google OAuth login route
 router.get('/auth/google', passport.authenticate(
   'google',
