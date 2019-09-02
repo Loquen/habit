@@ -18,21 +18,68 @@ function index(req, res){
   let habits = [];
   let categories = new Set(); // Sets only allow an item to occur once
   let month = getCurrentMonth();
-  
+  let today = getCurrentDay();
+
   if(req.user){
+    let save = false;
     req.user.habits.forEach(h => {
+      let monthFlag = false;
       h.months.forEach(m => {
         if(month === m.month) categories.add(h.category);
+        if(month === m.month) monthFlag = true;
       });
+
+      if(!monthFlag){
+        // We need to add the current month for this habit
+        let newMonth = createNewMonth();
+        h.months.push(newMonth);
+        save=true;
+      }
     });
+
+    if(save){
+      req.user.save()
+        .then(() => {
+          res.redirect('/habits');
+        })
+        .catch(err => {
+          console.log(err);
+          res.redirect('/habits');
+        });
+    }
+
+    // // Loop through all habits and check that the current month exists for them
+    // req.user.habits.forEach(h => {
+    //   let monthFlag = false;
+    //   h.months.forEach(m => {
+    //     if(month === m.month) monthFlag = true;
+    //   });
+    //   if(monthFlag){
+    //     // We need to add the current month for this habit
+    //     let newMonth = createNewMonth();
+    //     h.months.push(newMonth);
+    //   }
+    // })
+
     if(req.query.category && req.query.category !== 'All Habits'){ // We have a valid query
       req.user.habits.forEach(h => {
         if(h.category === req.query.category){ // The current habit is in the queried category
-          habits.push(h);
+          h.months.forEach(m => {
+            if(month === m.month){ // The current habit is in the queried month
+              habits.push(h);
+            }
+          });
         }
       });
     }else{ // No query or All Habits, render all habits
-      habits = req.user.habits;
+      // habits = req.user.habits;
+      req.user.habits.forEach(h => {
+        h.months.forEach(m => {
+          if(month === m.month){ // The current habit is in the queried month
+            habits.push(h);
+          }
+        });
+      });
     }
 
     res.render('habits/index', {
@@ -41,7 +88,7 @@ function index(req, res){
       allHabits: req.user.habits,
       categories: Array.from(categories).sort(),
       month,
-      today: getCurrentDay(),
+      today,
       title: `${req.user.name.substring(0, req.user.name.indexOf(" "))}'s Habits`,
       nav: 'Today'
     });
@@ -268,7 +315,7 @@ function getCurrentMonth(){
 }
 
 function getNumberOfDays(month){
-  return moment(month).daysInMonth();
+  return moment(month, 'M MM').daysInMonth();
 }
 
 function getCurrentDay(){
@@ -283,4 +330,17 @@ function getCurrentDay(){
     year: date.format('YYYY') // 2019 Number
   };
   return today;
+}
+
+function createNewMonth(){
+  let newMonth = {};
+  let today = getCurrentDay();
+
+  newMonth.month = getCurrentMonth();
+  let numberOfDays = getNumberOfDays(newMonth.month);
+  let days = new Array(numberOfDays).fill(false);
+  newMonth.days = days;
+  newMonth.year = today.year;
+  
+  return newMonth;
 }
