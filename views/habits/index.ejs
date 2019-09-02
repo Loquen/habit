@@ -41,7 +41,7 @@
                     <th class="red-text"><%= today.month %> <%= today.date %></th> -->
                     <th><div></div></th>
                   </thead>
-                  <% habits.forEach(habit => { %>        
+                  <!-- <% habits.forEach(habit => { %>        
                     <% habit.months.forEach( m => { %>
                       <% if(month === m.month){ %>
                         <tr>
@@ -69,7 +69,31 @@
                       <a href="/habits/<%= habit.id %>"><i class="material-icons">create</i></a>
                     </td>
                   </tr>
-                  <% }); %> 
+                  <% }); %>  -->
+                  <% daysToRender.habits.forEach(habit => { %>
+                    <tr>
+                        <td>
+                            <%= habit.name %>
+                          </td>
+                    <% habit.days.forEach(day => { %>
+                      
+                      <td>
+                        <% if(day.complete){ %>
+                          <% if(day.date === today.date) { %>
+                            <div class="today-complete"></div> 
+                          <% } else { %>
+                            <div class="complete"></div>
+                          <% } %>
+                        <% }else{ %>
+                          <div class="incomplete"></div>
+                        <% } %>
+                      </td>
+                    <% }); %>
+                    <td>
+                      <a href="/habits/<%= habit.id %>"><i class="material-icons">create</i></a>
+                    </td>
+                  </tr>
+                  <% }); %>
                 </table>
               </div>
             </div>
