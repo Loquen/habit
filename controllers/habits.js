@@ -33,7 +33,7 @@ function index(req, res){
         // We need to add the current month for this habit
         let newMonth = createNewMonth();
         h.months.push(newMonth);
-        save=true;
+        save = true;
       }
     });
 
@@ -48,19 +48,6 @@ function index(req, res){
         });
     }
 
-    // // Loop through all habits and check that the current month exists for them
-    // req.user.habits.forEach(h => {
-    //   let monthFlag = false;
-    //   h.months.forEach(m => {
-    //     if(month === m.month) monthFlag = true;
-    //   });
-    //   if(monthFlag){
-    //     // We need to add the current month for this habit
-    //     let newMonth = createNewMonth();
-    //     h.months.push(newMonth);
-    //   }
-    // })
-
     if(req.query.category && req.query.category !== 'All Habits'){ // We have a valid query
       req.user.habits.forEach(h => {
         if(h.category === req.query.category){ // The current habit is in the queried category
@@ -72,7 +59,6 @@ function index(req, res){
         }
       });
     }else{ // No query or All Habits, render all habits
-      // habits = req.user.habits;
       req.user.habits.forEach(h => {
         h.months.forEach(m => {
           if(month === m.month){ // The current habit is in the queried month
