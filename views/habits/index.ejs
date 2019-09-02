@@ -29,10 +29,16 @@
                 <table>
                   <thead>
                     <th>Habit</th>
-                    <th><%= today.month %> <%= today.date - 3 %></th>
-                    <th><%= today.month %> <%= today.date - 2 %></th>
+                    <% daysToRender.habits[0].days.forEach(day => { %>
+                      <% if(day.date === today.date){ %>
+                        <th class="red-text"><%= today.month %> <%= today.date %></th>
+                      <% }else{ %>
+                        <th><%= day.month %> <%= day.date %></th>
+                      <% } %>
+                    <% }); %>
+                    <!-- <th><%= today.month %> <%= today.date - 2 %></th>
                     <th><%= today.month %> <%= today.date - 1 %></th>
-                    <th class="red-text"><%= today.month %> <%= today.date %></th>
+                    <th class="red-text"><%= today.month %> <%= today.date %></th> -->
                     <th><div></div></th>
                   </thead>
                   <% habits.forEach(habit => { %>        

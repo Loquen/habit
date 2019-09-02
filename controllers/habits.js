@@ -19,6 +19,12 @@ function index(req, res){
   let categories = new Set(); // Sets only allow an item to occur once
   let month = getCurrentMonth();
   let today = getCurrentDay();
+  let daysToRender = {};
+
+  // Initialize our days object that will be rendered with the 4 days
+  daysToRender.today = today;
+  daysToRender.month = month;
+  daysToRender.habits = [];
 
   if(req.user){
     let save = false;
@@ -37,6 +43,7 @@ function index(req, res){
       }
     });
 
+    // We have a new month to add to the users habits, we need to save
     if(save){
       req.user.save()
         .then(() => {
@@ -47,6 +54,99 @@ function index(req, res){
           res.redirect('/habits');
         });
     }
+
+    // Building the days to render object
+    // we need the habit name and an array of objects that contains the date, month and complete?
+    req.user.habits.forEach(h => {
+      let habit = {};
+      habit.name = h.name;
+      habit.days = [];
+      switch (today.date) {
+        case 1:
+          // Add the last 3 days of the prev month and 1 of this month
+          h.months.forEach(m => {
+            if(m.month === month - 1){
+              let prevMonthDays = getNumberOfDays(month - 1);
+              for(let i = 1; i <= 3; i++){
+                habit.days.push({
+                  month: month - 1,
+                  date: prevMonthDays - 3 + i,
+                  complete: m.days[prevMonthDays - 4 + i]
+                });
+              }
+            }else if(month === m.month){
+              habit.days.push({
+                month,
+                date: today.date,
+                complete: m.days[today.date - 1]
+              });
+            }
+          });
+          break;
+        case 2:
+          // Add last 2 days of prev month and first 2 of this month
+          h.months.forEach(m => {
+            if(m.month === month - 1){
+              let prevMonthDays = getNumberOfDays(month - 1);
+              for(let i = 1; i <= 2; i++){
+                habit.days.push({
+                  month: month - 1,
+                  date: prevMonthDays - 2 + i,
+                  complete: m.days[prevMonthDays - 3 + i]
+                });
+              }
+            }else if(month === m.month){
+              for(let i = 0; i <= 1; i++){
+                habit.days.push({
+                  month,
+                  date: today.date + i - 1,
+                  complete: m.days[today.date + i - 1]
+                });
+              }
+            }
+          });
+          break;
+        case 3:
+          // Add the last day of prev month and first 3 of this month
+          h.months.forEach(m => {
+            let prevMonthDays = getNumberOfDays(month - 1);
+            if(m.month === month - 1){
+              habit.days.push({
+                month: month - 1,
+                date: prevMonthDays,
+                complete: m.days[prevMonthDays - 1]
+              });
+            }else if(month === m.month){
+              for(let i = 1; i <= 3; i++){
+                habit.days.push({
+                  month,
+                  date: i,
+                  complete: m.days[i - 1]
+                });
+              }
+            }
+          });
+          break;
+        default: 
+          // Add the past 4 days including today
+          h.months.forEach(m => {
+            if(month === m.month){
+              m.days.forEach((d, i) => {
+                if(i === today.date - 4 || i === today.date - 3 || i === today.date - 2 || i === today.date - 1){
+                  habit.days.push({
+                    month,
+                    date: i + 1,
+                    complete: m.days[i]
+                  });
+                }
+              });
+            }
+          });
+      }
+      daysToRender.habits.push(habit);
+    });
+
+    console.log(daysToRender);
 
     if(req.query.category && req.query.category !== 'All Habits'){ // We have a valid query
       req.user.habits.forEach(h => {
@@ -71,6 +171,7 @@ function index(req, res){
     res.render('habits/index', {
       user: req.user,
       habits,
+      daysToRender,
       allHabits: req.user.habits,
       categories: Array.from(categories).sort(),
       month,
@@ -82,6 +183,7 @@ function index(req, res){
     res.render('habits/index', {
       user: null,
       habits: null,
+      daysToRender: null,
       month: null,
       today: null,
       categories: null,
