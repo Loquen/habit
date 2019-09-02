@@ -100,7 +100,7 @@ function index(req, res){
                 habit.days.push({
                   month,
                   date: today.date + i - 1,
-                  complete: m.days[today.date + i - 1]
+                  complete: m.days[today.date + i - 2]
                 });
               }
             }

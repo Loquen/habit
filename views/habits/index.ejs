@@ -109,7 +109,7 @@
             <form action="/habits/complete?_method=PUT" method="POST">
               <div class="card-content">
                 <h4>Habits For Today:</h4> 
-                <% habits.forEach(habit => { %>
+                <!-- <% habits.forEach(habit => { %>
                   <% habit.months.forEach(m => { %>
                     <% if(month === m.month) { %>
                       <% if(m.days[today.date - 1]){ %>
@@ -129,6 +129,24 @@
                       <% } %>
                     <% } %>
                   <% }); %>
+                <% }); %> -->
+              
+                <% daysToRender.habits.forEach(habit => { %>
+                  <% if(habit.days[3].complete){ %>
+                    <div>
+                      <label for="<%= habit.name %>" >
+                        <input type="checkbox" id="<%= habit.name %>" name="<%= habit.name %>" value="true" checked="checked"/>
+                        <span><%= habit.name %></span>
+                      </label>
+                    </div>
+                  <% }else{ %>
+                    <div>
+                      <label for="<%= habit.name %>" >
+                        <input type="checkbox" id="<%= habit.name %>" name="<%= habit.name %>"/>
+                        <span><%= habit.name %></span>
+                      </label>
+                    </div>
+                  <% } %>
                 <% }); %>
               </div>
               <div class="card-action">
