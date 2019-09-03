@@ -322,9 +322,6 @@ function all(req, res){
     month = getCurrentMonth();
     daysInMonth = getNumberOfDays(month);
   }
-
-  months = moment('9 2019').format('MMM');
-  console.log(months);
   
   res.render('habits/all', {
     user: req.user,

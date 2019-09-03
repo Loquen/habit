@@ -33,7 +33,8 @@
                       <% if(day.date === today.date){ %>
                         <th class="red-text"><%= today.month %> <%= today.date %></th>
                       <% }else{ %>
-                        <th><%= day.month %> <%= day.date %></th>
+                        <% let monthsArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; %>
+                        <th><%= monthsArray[day.month - 1] %> <%= day.date %></th>
                       <% } %>
                     <% }); %>
                     <!-- <th><%= today.month %> <%= today.date - 2 %></th>
