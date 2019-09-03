@@ -61,6 +61,7 @@ function index(req, res){
       let habit = {};
       habit.name = h.name;
       habit.days = [];
+      
       switch (today.date) {
         case 1:
           // Add the last 3 days of the prev month and 1 of this month
@@ -143,7 +144,13 @@ function index(req, res){
             }
           });
       }
-      daysToRender.habits.push(habit);
+      if(h.category === req.query.category && req.query.category){
+        daysToRender.habits.push(habit);
+        console.log(daysToRender);
+      }else if(!req.query.category || req.query.category === 'All Habits'){
+        daysToRender.habits.push(habit);
+        console.log(daysToRender);
+      }
     });
 
     // console.log(daysToRender);
