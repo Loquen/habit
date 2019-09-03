@@ -14,9 +14,6 @@
                       <option value="<%= m %>"><%= m %></option>
                     </div>
                   <% }); %>
-                  <div>
-                    <option value="All Months">All Months</option>
-                  </div>
                 </select> 
               </div>
                 <div class="col m6 l2">
@@ -25,7 +22,8 @@
             </form> 
           </div>                 
           <div class="row">
-            <h4 class="heading"><%= today.month %></h4>
+            <% let monthsArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; %>
+            <h4 class="heading"><%= monthsArray[month - 1] %></h4>
             <table>
               <thead>
                 <th>Habit</th>

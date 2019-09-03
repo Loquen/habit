@@ -146,7 +146,7 @@ function index(req, res){
       daysToRender.habits.push(habit);
     });
 
-    console.log(daysToRender);
+    // console.log(daysToRender);
 
     if(req.query.category && req.query.category !== 'All Habits'){ // We have a valid query
       req.user.habits.forEach(h => {
@@ -317,11 +317,14 @@ function all(req, res){
         }
       });
     });
-  }else{ // No query or All Habits, render all habits
+  }else{ // No query or All Habits, render current months habits
     habits = req.user.habits;
     month = getCurrentMonth();
     daysInMonth = getNumberOfDays(month);
   }
+
+  months = moment('9 2019').format('MMM');
+  console.log(months);
   
   res.render('habits/all', {
     user: req.user,
