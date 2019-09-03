@@ -28,7 +28,7 @@
               <thead>
                 <th>Habit</th>
                 <% for(let i = 1; i <= daysInMonth; i++){ %>
-                  <% if(i === today.date) { %>
+                  <% if(i === today.date && today.m === month) { %>
                     <th class="red-text"><%= i %></th>
                   <% } else { %> 
                     <th><%= i %></th>
@@ -46,7 +46,7 @@
                     <% m.days.forEach((day, i) => { %>
                       <td>
                       <% if(day){ %>
-                        <% if(i === today.date - 1) { %>
+                        <% if(i === today.date - 1 && today.m === month) { %>
                           <div class="all-today-complete"></div> 
                         <% } else { %>
                           <div class="all-complete"></div>
