@@ -146,14 +146,10 @@ function index(req, res){
       }
       if(h.category === req.query.category && req.query.category){
         daysToRender.habits.push(habit);
-        console.log(daysToRender);
       }else if(!req.query.category || req.query.category === 'All Habits'){
         daysToRender.habits.push(habit);
-        console.log(daysToRender);
       }
     });
-
-    // console.log(daysToRender);
 
     if(req.query.category && req.query.category !== 'All Habits'){ // We have a valid query
       req.user.habits.forEach(h => {

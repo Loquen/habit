@@ -39,35 +39,6 @@
                     <% }); %>
                     <th><div></div></th>
                   </thead>
-                  <!-- <% habits.forEach(habit => { %>        
-                    <% habit.months.forEach( m => { %>
-                      <% if(month === m.month){ %>
-                        <tr>
-                          <td>
-                            <%= habit.name %>
-                          </td>
-                          <% m.days.forEach((day, i) => { %>
-                            <% if(i === today.date - 4 || i === today.date - 3 || i === today.date - 2 || i === today.date - 1){ %>
-                              <td>
-                              <% if(day){ %>
-                                <% if(i === today.date - 1) { %>
-                                  <div class="today-complete"></div> 
-                                <% } else { %>
-                                  <div class="complete"></div>
-                                <% } %>
-                              <% }else{ %>
-                                <div class="incompete"></div>
-                              <% } %>
-                              </td>
-                            <% } %>
-                        <% }); %> 
-                      <% } %>
-                    <% }); %> 
-                    <td>
-                      <a href="/habits/<%= habit.id %>"><i class="material-icons">create</i></a>
-                    </td>
-                  </tr>
-                  <% }); %>  -->
                   <% daysToRender.habits.forEach(habit => { %>
                     <tr>
                         <td>
@@ -107,28 +78,6 @@
             <form action="/habits/complete?_method=PUT" method="POST">
               <div class="card-content">
                 <h4>Habits For Today:</h4> 
-                <!-- <% habits.forEach(habit => { %>
-                  <% habit.months.forEach(m => { %>
-                    <% if(month === m.month) { %>
-                      <% if(m.days[today.date - 1]){ %>
-                        <div>
-                          <label for="<%= habit.name %>" >
-                            <input type="checkbox" id="<%= habit.name %>" name="<%= habit.name %>" value="true" checked="checked"/>
-                            <span><%= habit.name %></span>
-                          </label>
-                        </div>
-                      <% }else{ %>
-                        <div>
-                          <label for="<%= habit.name %>" >
-                            <input type="checkbox" id="<%= habit.name %>" name="<%= habit.name %>"/>
-                            <span><%= habit.name %></span>
-                          </label>
-                        </div>
-                      <% } %>
-                    <% } %>
-                  <% }); %>
-                <% }); %> -->
-              
                 <% daysToRender.habits.forEach(habit => { %>
                   <% if(habit.days[3].complete){ %>
                     <div>
